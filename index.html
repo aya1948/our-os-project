@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CPU Scheduling Simulator - RR vs SRTF</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="container">
+    <h1>CPU Scheduling Simulator - Round Robin vs SRTF</h1>
+
+    <!-- Input Section -->
+    <div class="input-section">
+        <h3>Add Process</h3>
+        <div class="input-row">
+            <label>Process ID:</label>
+            <input type="text" id="pid" placeholder="ID">
+            <label>Arrival Time:</label>
+            <input type="text" id="arrival" placeholder="Arrival">
+            <label>Burst Time:</label>
+            <input type="text" id="burst" placeholder="Burst">
+            <button onclick="addProcess()">Add Process</button>
+        </div>
+        <table class="process-table" id="processTable">
+            <thead>
+                <tr><th>ID</th><th>Arrival Time</th><th>Burst Time</th></tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+        <div class="action-row">
+            <label>Quantum:</label>
+            <input type="text" id="quantum" placeholder="Q" class="quantum-input">
+            <button onclick="runSimulation()">Run Simulation</button>
+            <button onclick="clearAll()" class="clear-btn">Clear Data</button>
+        </div>
+        <!-- Test Scenarios -->
+        <div class="test-scenarios">
+            <strong>Test Scenarios:</strong>
+            <button onclick="loadScenario('A')">A - Mixed</button>
+            <button onclick="loadScenario('B')">B - Quantum</button>
+            <button onclick="loadScenario('C')">C - Short Jobs</button>
+            <button onclick="loadScenario('D')">D - Fairness</button>
+            <button onclick="loadScenario('E')">E - Validation</button>
+        </div>
+    </div>
+
+    <!-- Results Section -->
+    <h2>Results</h2>
+    <div class="output-section">
+        <!-- Round Robin Panel -->
+        <div class="algo-panel">
+            <h3>Round Robin</h3>
+            <canvas id="rrCanvas" class="gantt-canvas"></canvas>
+            <div id="rrTableContainer"></div>
+            <h4>Ready Queue Log</h4>
+            <div id="rrQueueLog" class="ready-queue-log"></div>
+        </div>
+        <!-- SRTF Panel -->
+        <div class="algo-panel">
+            <h3>SRTF</h3>
+            <canvas id="srtfCanvas" class="gantt-canvas"></canvas>
+            <div id="srtfTableContainer"></div>
+        </div>
+    </div>
+
+    <!-- Comparison & Conclusion -->
+    <div class="summary-section">
+        <h3>Comparison Summary</h3>
+        <div id="comparisonSummary" class="comparison"></div>
+        <h3>Final Conclusion</h3>
+        <div id="conclusion" class="conclusion"></div>
+    </div>
+</div>
+
+<script src="scheduler_rr.js"></script>
+<script src="scheduler_srtf.js"></script>
+<script src="ui_controller.js"></script>
+</body>
+</html>
