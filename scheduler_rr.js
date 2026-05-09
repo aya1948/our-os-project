@@ -1,6 +1,3 @@
-/*****************************************
- * نماذج البيانات + خوارزمية Round Robin
- *****************************************/
 class Process {
     constructor(id, arrivalTime, burstTime) {
         this.id = id;
@@ -15,7 +12,7 @@ class Process {
 
 class GanttEntry {
     constructor(processId, startTime, endTime) {
-        this.processId = processId; // -1 للـ Idle
+        this.processId = processId; 
         this.startTime = startTime;
         this.endTime = endTime;
     }
@@ -35,7 +32,6 @@ class SchedulerRR {
         let time = 0, index = 0, current = null, timeSlice = 0;
 
         while (index < procs.length || readyQueue.length > 0 || current !== null) {
-            // إضافة الواصلين في اللحظة الحالية
             while (index < procs.length && procs[index].arrivalTime === time) {
                 readyQueue.push(procs[index]);
                 index++;
@@ -50,7 +46,6 @@ class SchedulerRR {
                 }
             }
 
-            // تسجيل حالة الطابور
             const readyIds = readyQueue.map(p => `P${p.id}`).join(', ');
             const runningStr = current ? `P${current.id}` : 'idle';
             this.readyQueueLog.push(`t=${time} Ready: [${readyIds}] Running: ${runningStr}`);
@@ -61,7 +56,7 @@ class SchedulerRR {
                 continue;
             }
 
-            // تنفيذ وحدة زمنية
+            
             current.remainingTime--;
             timeSlice++;
             this.addOrExtendGantt(current.id, time, 1);

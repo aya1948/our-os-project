@@ -1,18 +1,18 @@
 body {
     font-family: Arial, sans-serif;
     margin: 15px;
-    background-color: #f4f4f4;
+    background-color:rgb(184, 177, 193) ;
 }
 .container {
     max-width: 1300px;
     margin: auto;
-    background: white;
+    background: rgb(107, 47, 185);
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0,0,0,0.1);
 }
 .input-section {
-    background: #e9ecef;
+    background: #ffffff;
     padding: 15px;
     border-radius: 8px;
     margin-bottom: 20px;
@@ -35,20 +35,20 @@ body {
 button {
     padding: 8px 16px;
     cursor: pointer;
-    background: #007bff;
+    background: rgb(107, 47, 185);
     color: white;
     border: none;
     border-radius: 5px;
     font-weight: bold;
 }
 button:hover {
-    background: #0056b3;
+    background: #3c0e71;
 }
 .clear-btn {
-    background: #6c757d;
+    background: rgb(112, 110, 116);
 }
 .clear-btn:hover {
-    background: #5a6268;
+    background: #373a3d;
 }
 .process-table {
     width: 100%;
@@ -112,20 +112,18 @@ button:hover {
     margin-top: 20px;
 }
 .comparison {
-    background: #fff3cd;
+    background: rgb(184, 177, 193);
     padding: 10px;
     border-radius: 5px;
     white-space: pre-wrap;
 }
 .conclusion {
-    background: #d4edda;
+    background:rgb(184, 177, 193);
     padding: 10px;
     border-radius: 5px;
     white-space: pre-wrap;
 }
-/* ... نفس الكود السابق ... */
 
-/* إضافة تنسيق منطقة Test Scenarios */
 .test-scenarios {
     margin-top: 15px;
     padding-top: 10px;
@@ -136,10 +134,10 @@ button:hover {
     align-items: center;
 }
 .test-scenarios button {
-    background: #17a2b8;
+    background: rgb(107, 47, 185);
     font-size: 12px;
     padding: 6px 12px;
 }
 .test-scenarios button:hover {
-    background: #138496;
+    background: rgb(160, 123, 208);
 }

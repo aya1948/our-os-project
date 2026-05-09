@@ -157,9 +157,6 @@ const UI = {
                 ];
                 quantum = 1;
                 break;
-            case 'E': // Scenario E: Validation case
-                alert('Validation Case:\nTry adding a process with:\n- Negative arrival time\n- Burst time = 0\n- Duplicate IDs\n- Non-numeric values\nThe simulator will show appropriate error messages.');
-                return;
         }
 
         // تعبئة الجدول والحقول

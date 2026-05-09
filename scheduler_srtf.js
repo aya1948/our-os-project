@@ -1,7 +1,3 @@
-/*****************************************
- * خوارزمية SRTF
- * (تعتمد على وجود Process و GanttEntry من scheduler_rr.js)
- *****************************************/
 class SchedulerSRTF {
     constructor(processes) {
         this.processes = processes.map(p => new Process(p.id, p.arrivalTime, p.burstTime));
