@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RR vs SRTF</title>
+    <title>CPU Scheduling Simulator - RR vs SRTF</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 <div class="container">
-    <h1>Round Robin vs SRTF</h1>
+    <h1>CPU Scheduling Simulator - Round Robin vs SRTF</h1>
 
     <!-- Input Section -->
     <div class="input-section">
@@ -34,7 +34,7 @@
             <button onclick="runSimulation()">Run Simulation</button>
             <button onclick="clearAll()" class="clear-btn">Clear Data</button>
         </div>
-        <!-- Test Scenarios  -->
+        <!-- Test Scenarios (بدون E) -->
         <div class="test-scenarios">
             <strong>Test Scenarios:</strong>
             <button onclick="loadScenario('A')">A - Mixed</button>
@@ -63,12 +63,10 @@
         </div>
     </div>
 
-    <!-- Comparison & Conclusion -->
+    <!-- Comparison Section only -->
     <div class="summary-section">
         <h3>Comparison Summary</h3>
         <div id="comparisonSummary" class="comparison"></div>
-        <h3>Final Conclusion</h3>
-        <div id="conclusion" class="conclusion"></div>
     </div>
 </div>
 

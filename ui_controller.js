@@ -1,5 +1,6 @@
 /*****************************************
  * رسم Gantt + مقارنة + واجهة المستخدم
+ * (بدون أي استنتاج - فقط مقارنة رقمية)
  *****************************************/
 class GanttRenderer {
     static draw(canvas, entries) {
@@ -56,13 +57,10 @@ class GanttRenderer {
     }
 }
 
+// ===== محرك المقارنة (أرقام فقط) =====
 class ComparisonEngine {
     static compute(rrProcesses, srtfProcesses, quantum) {
         const avg = arr => arr.reduce((a, b) => a + b, 0) / arr.length;
-        const stdDev = (arr) => {
-            const mean = avg(arr);
-            return Math.sqrt(avg(arr.map(x => (x - mean) ** 2)));
-        };
 
         const rrWT = rrProcesses.map(p => (p.completionTime - p.arrivalTime - p.burstTime));
         const rrTAT = rrProcesses.map(p => (p.completionTime - p.arrivalTime));
@@ -74,55 +72,28 @@ class ComparisonEngine {
         const rrAvgWT = avg(rrWT), srtfAvgWT = avg(srtfWT);
         const rrAvgTAT = avg(rrTAT), srtfAvgTAT = avg(srtfTAT);
         const rrAvgRT = avg(rrRT), srtfAvgRT = avg(srtfRT);
-        const rrStdTAT = stdDev(rrTAT), srtfStdTAT = stdDev(srtfTAT);
 
-        let comp = `=== Comparison (Same Workload, Quantum = ${quantum}) ===\n\n`;
-        comp += `Metric          | Round Robin   | SRTF\n`;
-        comp += `Avg Waiting     | ${rrAvgWT.toFixed(2)}          | ${srtfAvgWT.toFixed(2)}\n`;
-        comp += `Avg Turnaround  | ${rrAvgTAT.toFixed(2)}          | ${srtfAvgTAT.toFixed(2)}\n`;
-        comp += `Avg Response    | ${rrAvgRT.toFixed(2)}          | ${srtfAvgRT.toFixed(2)}\n`;
-        comp += `TAT Std Dev     | ${rrStdTAT.toFixed(2)}          | ${srtfStdTAT.toFixed(2)}   (lower = fairer)\n`;
+        let comp = `Comparison (Same Workload, Quantum = ${quantum}) \n\n`;
+        comp += `Metric             | Round Robin   | SRTF\n`;
+        comp += `Avg Waiting Time   | ${rrAvgWT.toFixed(2)}          | ${srtfAvgWT.toFixed(2)}\n`;
+        comp += `Avg Turnaround Time| ${rrAvgTAT.toFixed(2)}          | ${srtfAvgTAT.toFixed(2)}\n`;
+        comp += `Avg Response Time  | ${rrAvgRT.toFixed(2)}          | ${srtfAvgRT.toFixed(2)}\n`;
 
-        let concl = `=== Final Conclusion ===\n\n`;
-        concl += `1. Average Waiting Time: `;
-        if (rrAvgWT < srtfAvgWT) concl += `Round Robin gave better (lower) average waiting time.\n`;
-        else if (srtfAvgWT < rrAvgWT) concl += `SRTF gave better average waiting time (short jobs finish quickly).\n`;
-        else concl += `Both gave identical average waiting time.\n`;
-
-        concl += `2. Response Time: `;
-        if (rrAvgRT < srtfAvgRT) concl += `Round Robin gave faster first response (fair time-slicing).\n`;
-        else if (srtfAvgRT < rrAvgRT) concl += `SRTF gave better response time (short jobs start immediately).\n`;
-        else concl += `Both gave similar response times.\n`;
-
-        concl += `3. Fairness: `;
-        if (rrStdTAT < srtfStdTAT) concl += `Round Robin appears fairer (less variation in turnaround times).\n`;
-        else concl += `SRTF shows less fairness, as long jobs may starve.\n`;
-
-        concl += `4. Effect of Quantum (RR): ${quantum}. Smaller quantum improves response time but increases context switches.\n`;
-        concl += `\nRecommendation: `;
-        if (rrAvgWT < srtfAvgWT && rrAvgRT < srtfAvgRT) {
-            concl += `Round Robin is recommended for this workload because it balances response and waiting time.`;
-        } else if (srtfAvgWT < rrAvgWT && srtfAvgRT < rrAvgRT) {
-            concl += `SRTF is recommended (efficient, short jobs complete quickly).`;
-        } else {
-            concl += `The choice depends on priority: use RR if fairness and response time matter, SRTF if overall efficiency and short‑job preference are desired.`;
-        }
-
-        return { comparisonText: comp, conclusionText: concl };
+        return { comparisonText: comp };
     }
 }
 
+// ===== واجهة المستخدم (بدون Conclusion) =====
 const UI = {
     processList: [],
 
-    // تحميل أحد السيناريوهات الجاهزة
     loadScenario(code) {
-        this.clearAll(); // مسح البيانات السابقة
+        this.clearAll();
         let processes = [];
         let quantum = 2;
 
         switch (code) {
-            case 'A': // Scenario A: Basic mixed workload
+            case 'A':
                 processes = [
                     new Process(1, 0, 5),
                     new Process(2, 1, 3),
@@ -131,15 +102,15 @@ const UI = {
                 ];
                 quantum = 2;
                 break;
-            case 'B': // Scenario B: Quantum sensitivity
+            case 'B':
                 processes = [
                     new Process(1, 0, 10),
                     new Process(2, 1, 5),
                     new Process(3, 3, 8)
                 ];
-                quantum = 4; // Quantum كبير نسبياً
+                quantum = 4;
                 break;
-            case 'C': // Scenario C: Short-job-heavy
+            case 'C':
                 processes = [
                     new Process(1, 0, 2),
                     new Process(2, 0, 3),
@@ -148,7 +119,7 @@ const UI = {
                 ];
                 quantum = 1;
                 break;
-            case 'D': // Scenario D: Interactive-style fairness
+            case 'D':
                 processes = [
                     new Process(1, 0, 4),
                     new Process(2, 1, 2),
@@ -159,7 +130,6 @@ const UI = {
                 break;
         }
 
-        // تعبئة الجدول والحقول
         this.processList = processes;
         this.updateTable();
         document.getElementById('quantum').value = quantum;
@@ -215,7 +185,6 @@ const UI = {
         document.getElementById('srtfTableContainer').innerHTML = '';
         document.getElementById('rrQueueLog').innerHTML = '';
         document.getElementById('comparisonSummary').innerHTML = '';
-        document.getElementById('conclusion').innerHTML = '';
     },
 
     runSimulation() {
@@ -249,11 +218,10 @@ const UI = {
         const logDiv = document.getElementById('rrQueueLog');
         logDiv.innerHTML = rrResult.log.map(entry => `<div>${entry}</div>`).join('');
 
-        const { comparisonText, conclusionText } = ComparisonEngine.compute(
+        const { comparisonText } = ComparisonEngine.compute(
             rrResult.processes, srtfResult.processes, quantum
         );
         document.getElementById('comparisonSummary').innerText = comparisonText;
-        document.getElementById('conclusion').innerText = conclusionText;
     },
 
     renderMetricsTable(containerId, processes) {
