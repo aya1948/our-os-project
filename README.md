@@ -1,4 +1,4 @@
-# Round Robin vs SRTF - CPU Scheduling Simulator (C2)
+# Round Robin vs SRTF 
 
 ## Project Description
 This project simulates two CPU scheduling algorithms: **Round Robin (RR)** and **Shortest Remaining Time First (SRTF)**.  
