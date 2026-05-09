@@ -12,7 +12,7 @@ class Process {
 
 class GanttEntry {
     constructor(processId, startTime, endTime) {
-        this.processId = processId; 
+        this.processId = processId;
         this.startTime = startTime;
         this.endTime = endTime;
     }
@@ -27,16 +27,21 @@ class SchedulerRR {
     }
 
     simulate() {
-        const procs = [...this.processes].sort((a, b) => a.arrivalTime - b.arrivalTime);
+        const procs = [...this.processes].sort((a, b) =>
+            a.arrivalTime !== b.arrivalTime ? a.arrivalTime - b.arrivalTime : a.id - b.id
+        );
         const readyQueue = [];
         let time = 0, index = 0, current = null, timeSlice = 0;
 
         while (index < procs.length || readyQueue.length > 0 || current !== null) {
-            while (index < procs.length && procs[index].arrivalTime === time) {
+
+            // Enqueue all processes that have arrived at or before current time
+            while (index < procs.length && procs[index].arrivalTime <= time) {
                 readyQueue.push(procs[index]);
                 index++;
             }
 
+            // Pick next process if CPU is free
             if (current === null && readyQueue.length > 0) {
                 current = readyQueue.shift();
                 timeSlice = 0;
@@ -46,32 +51,43 @@ class SchedulerRR {
                 }
             }
 
-            const readyIds = readyQueue.map(p => `P${p.id}`).join(', ');
-            const runningStr = current ? `P${current.id}` : 'idle';
-            this.readyQueueLog.push(`t=${time} Ready: [${readyIds}] Running: ${runningStr}`);
+            // Log ready queue state
+            const readyIds = readyQueue.map(p => 'P' + p.id).join(', ');
+            const runningStr = current ? 'P' + current.id : 'Idle';
+            this.readyQueueLog.push('t=' + time + ' | Running: ' + runningStr + ' | Ready Queue: [' + readyIds + ']');
 
+            // CPU idle
             if (current === null) {
                 this.addOrExtendGantt(-1, time, 1);
                 time++;
                 continue;
             }
 
-            
+            // Execute one unit
             current.remainingTime--;
             timeSlice++;
             this.addOrExtendGantt(current.id, time, 1);
             time++;
 
+            // Enqueue processes that arrived at the new time (after tick)
+            while (index < procs.length && procs[index].arrivalTime <= time) {
+                readyQueue.push(procs[index]);
+                index++;
+            }
+
             if (current.remainingTime === 0) {
+                // Process finished
                 current.completionTime = time;
                 current = null;
                 timeSlice = 0;
             } else if (timeSlice === this.quantum) {
+                // Quantum expired — re-enqueue current AFTER newly arrived processes
                 readyQueue.push(current);
                 current = null;
                 timeSlice = 0;
             }
         }
+
         return { processes: this.processes, gantt: this.ganttEntries, log: this.readyQueueLog };
     }
 

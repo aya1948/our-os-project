@@ -3,73 +3,84 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CPU Scheduling Simulator - RR vs SRTF</title>
+    <title>Round Robin vs SRTF Scheduler</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 <div class="container">
-    <h1>CPU Scheduling Simulator - Round Robin vs SRTF</h1>
+    <h1>Round Robin vs SRTF — Scheduling Comparison</h1>
 
     <!-- Input Section -->
     <div class="input-section">
         <h3>Add Process</h3>
         <div class="input-row">
             <label>Process ID:</label>
-            <input type="text" id="pid" placeholder="ID">
+            <input type="number" id="pid" placeholder="e.g. 1" min="1">
             <label>Arrival Time:</label>
-            <input type="text" id="arrival" placeholder="Arrival">
+            <input type="number" id="arrival" placeholder="e.g. 0" min="0">
             <label>Burst Time:</label>
-            <input type="text" id="burst" placeholder="Burst">
+            <input type="number" id="burst" placeholder="e.g. 5" min="1">
             <button onclick="addProcess()">Add Process</button>
         </div>
+
         <table class="process-table" id="processTable">
             <thead>
-                <tr><th>ID</th><th>Arrival Time</th><th>Burst Time</th></tr>
+                <tr><th>PID</th><th>Arrival Time</th><th>Burst Time</th></tr>
             </thead>
             <tbody></tbody>
         </table>
+
         <div class="action-row">
-            <label>Quantum:</label>
-            <input type="text" id="quantum" placeholder="Q" class="quantum-input">
-            <button onclick="runSimulation()">Run Simulation</button>
-            <button onclick="clearAll()" class="clear-btn">Clear Data</button>
+            <label>Time Quantum (RR):</label>
+            <input type="number" id="quantum" placeholder="e.g. 2" min="1" class="quantum-input">
+            <button onclick="runSimulation()">▶ Run Simulation</button>
+            <button onclick="clearAll()" class="clear-btn">✕ Clear All</button>
         </div>
-        <!-- Test Scenarios (بدون E) -->
+
+        <!-- Test Scenarios -->
         <div class="test-scenarios">
-            <strong>Test Scenarios:</strong>
-            <button onclick="loadScenario('A')">A - Mixed</button>
-            <button onclick="loadScenario('B')">B - Quantum</button>
-            <button onclick="loadScenario('C')">C - Short Jobs</button>
-            <button onclick="loadScenario('D')">D - Fairness</button>
+            <strong>Preset Test Scenarios:</strong>
+            <button onclick="loadScenario('A')">A — Normal Mixed</button>
+            <button onclick="loadScenario('B')">B — Quantum Sensitivity</button>
+            <button onclick="loadScenario('C')">C — Short Jobs (SRTF advantage)</button>
+            <button onclick="loadScenario('D')">D — Fairness Test</button>
         </div>
     </div>
 
     <!-- Results Section -->
-    <h2>Results</h2>
+    <h2>Simulation Results</h2>
     <div class="output-section">
         <!-- Round Robin Panel -->
         <div class="algo-panel">
-            <h3>Round Robin</h3>
-            <canvas id="rrCanvas" class="gantt-canvas"></canvas>
+            <h3>🔁 Round Robin</h3>
+            <div style="overflow-x:auto;">
+                <canvas id="rrCanvas" class="gantt-canvas"></canvas>
+            </div>
             <div id="rrTableContainer"></div>
             <h4>Ready Queue Log</h4>
             <div id="rrQueueLog" class="ready-queue-log"></div>
         </div>
+
         <!-- SRTF Panel -->
         <div class="algo-panel">
-            <h3>SRTF</h3>
-            <canvas id="srtfCanvas" class="gantt-canvas"></canvas>
+            <h3>⚡ SRTF</h3>
+            <div style="overflow-x:auto;">
+                <canvas id="srtfCanvas" class="gantt-canvas"></canvas>
+            </div>
             <div id="srtfTableContainer"></div>
         </div>
     </div>
 
-    <!-- Comparison Section only -->
+    <!-- Comparison & Conclusion -->
     <div class="summary-section">
-        <h3>Comparison Summary</h3>
-        <div id="comparisonSummary" class="comparison"></div>
+        <h3>📊 Comparison Summary</h3>
+        <pre id="comparisonSummary" class="comparison"></pre>
+        <h3>✅ Final Conclusion</h3>
+        <pre id="conclusion" class="conclusion"></pre>
     </div>
 </div>
 
+<!-- Scripts loaded in correct dependency order -->
 <script src="scheduler_rr.js"></script>
 <script src="scheduler_srtf.js"></script>
 <script src="ui_controller.js"></script>

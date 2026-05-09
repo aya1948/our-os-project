@@ -5,29 +5,29 @@ class SchedulerSRTF {
     }
 
     simulate() {
-        const procs = [...this.processes].sort((a, b) => a.arrivalTime - b.arrivalTime);
+        const procs = [...this.processes].sort((a, b) =>
+            a.arrivalTime !== b.arrivalTime ? a.arrivalTime - b.arrivalTime : a.id - b.id
+        );
         const readyQueue = [];
         let time = 0, index = 0, current = null;
 
         const addToReady = (p) => {
             readyQueue.push(p);
-            readyQueue.sort((a, b) => a.remainingTime - b.remainingTime);
+            // Sort by remaining time, break ties by process ID
+            readyQueue.sort((a, b) =>
+                a.remainingTime !== b.remainingTime ? a.remainingTime - b.remainingTime : a.id - b.id
+            );
         };
 
         while (index < procs.length || readyQueue.length > 0 || current !== null) {
-            while (index < procs.length && procs[index].arrivalTime === time) {
+
+            // Enqueue all processes that have arrived at or before current time
+            while (index < procs.length && procs[index].arrivalTime <= time) {
                 addToReady(procs[index]);
                 index++;
             }
 
-            if (current === null && readyQueue.length > 0) {
-                current = readyQueue.shift();
-                if (!current.started) {
-                    current.startTime = time;
-                    current.started = true;
-                }
-            }
-
+            // Preemption check: if a shorter job is available, preempt current
             if (current !== null && readyQueue.length > 0) {
                 const shortest = readyQueue[0];
                 if (shortest.remainingTime < current.remainingTime) {
@@ -40,12 +40,23 @@ class SchedulerSRTF {
                 }
             }
 
+            // Pick next process if CPU is free
+            if (current === null && readyQueue.length > 0) {
+                current = readyQueue.shift();
+                if (!current.started) {
+                    current.startTime = time;
+                    current.started = true;
+                }
+            }
+
+            // CPU idle
             if (current === null) {
                 this.addOrExtendGantt(-1, time, 1);
                 time++;
                 continue;
             }
 
+            // Execute one unit
             current.remainingTime--;
             this.addOrExtendGantt(current.id, time, 1);
             time++;
@@ -55,6 +66,7 @@ class SchedulerSRTF {
                 current = null;
             }
         }
+
         return { processes: this.processes, gantt: this.ganttEntries };
     }
 
