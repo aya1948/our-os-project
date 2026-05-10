@@ -1,4 +1,3 @@
-// ==================== SRTF Scheduler ====================
 class SchedulerSRTF {
     constructor(processes) {
         this.processes = processes.map(p => new Process(p.id, p.arrivalTime, p.burstTime));

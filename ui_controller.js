@@ -1,6 +1,3 @@
-/*****************************************
- * رسم Gantt + مقارنة + واجهة المستخدم
- *****************************************/
 class GanttRenderer {
     static draw(canvas, entries) {
         if (entries.length === 0) return;
@@ -82,8 +79,6 @@ class ComparisonEngine {
         comp += `Avg Turnaround  | ${rrAvgTAT.toFixed(2)}          | ${srtfAvgTAT.toFixed(2)}\n`;
         comp += `Avg Response    | ${rrAvgRT.toFixed(2)}          | ${srtfAvgRT.toFixed(2)}\n`;
         comp += `TAT Std Dev     | ${rrStdTAT.toFixed(2)}          | ${srtfStdTAT.toFixed(2)}   (lower = fairer)\n`;
-
-        // Conclusion removed completely
         return { comparisonText: comp };
     }
 }
@@ -161,7 +156,7 @@ const UI = {
         document.getElementById('srtfTableContainer').innerHTML = '';
         document.getElementById('rrQueueLog').innerHTML = '';
         document.getElementById('comparisonSummary').innerHTML = '';
-        // لا يوجد conclusion لمسحه
+        
     },
 
     runSimulation() {
@@ -187,7 +182,7 @@ const UI = {
 
         const { comparisonText } = ComparisonEngine.compute(rrResult.processes, srtfResult.processes, quantum);
         document.getElementById('comparisonSummary').innerText = comparisonText;
-        // لا يتم كتابة أي شيء في conclusion
+        
     },
 
     renderMetricsTable(containerId, processes) {
@@ -206,7 +201,6 @@ const UI = {
     }
 };
 
-// ربط الأزرار بعد تحميل الصفحة
 document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('btnAdd').addEventListener('click', () => UI.addProcess());
     document.getElementById('btnRun').addEventListener('click', () => UI.runSimulation());

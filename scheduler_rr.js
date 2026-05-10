@@ -1,4 +1,3 @@
-// ==================== Model ====================
 class Process {
     constructor(id, arrivalTime, burstTime) {
         this.id = id;
@@ -19,7 +18,6 @@ class GanttEntry {
     }
 }
 
-// ==================== Round Robin Scheduler ====================
 class SchedulerRR {
     constructor(processes, quantum) {
         this.processes = processes.map(p => new Process(p.id, p.arrivalTime, p.burstTime));
