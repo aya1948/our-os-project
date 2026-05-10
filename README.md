@@ -1,5 +1,13 @@
 # Round Robin vs SRTF 
 
+## Team Members
+
+| 1   : [نور الدين شعبان محمود] : [20241071]  [ Input Validation & Scenarios] 
+| 2   : [يوسف محمد عبدالستار]   : [20241184]   [SRTF Algorithm] 
+| 3   : [توماس سامح صليب  ]     : [20240230]   [UI & Gantt Charts] 
+| 4   : [آية علي فرغل]           : [20240186]   [ Comparison & Testing] 
+| 5   : [ ميره ممدوح عبداللاهي]  : [20240159]   [ RR Algorithm]
+| 6   : [هاجر وجدي أمين ]       : [20241092]   [ Documentation & Report] 
 ## Project Description
 This project simulates two CPU scheduling algorithms: **Round Robin (RR)** and **Shortest Remaining Time First (SRTF)**.  
 Both algorithms run on the same workload, and the results are compared to analyze fairness, efficiency, and the effect of time quantum.
