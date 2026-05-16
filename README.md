@@ -30,12 +30,6 @@ Both algorithms run on the same workload, and the results are compared to analyz
 - `scheduler_srtf.js` – SRTF algorithm
 - `ui_controller.js` – UI logic, Gantt rendering, comparison engine
 
-## Screenshots
-- `screenshots/interface.png` – Main interface with input panel
-- `screenshots/rr_gantt.png` – Round Robin Gantt chart
-- `screenshots/srtf_gantt.png` – SRTF Gantt chart
-- `screenshots/comparison.png` – Comparison summary and conclusion
-
 ## Test Scenarios
 - **Scenario A** – Basic mixed workload (different arrival/burst times)
 - **Scenario B** – Quantum sensitivity (large quantum vs small)
